@@ -1,0 +1,9 @@
+{
+    "files": [],
+    "references": [
+      { "path": "./module-1"},
+      { "path": "./module-2"},
+      { "path": "./module-3"}
+    ]
+  }
+  

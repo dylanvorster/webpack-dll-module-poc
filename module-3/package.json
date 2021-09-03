@@ -1,0 +1,12 @@
+{
+    "name": "@local/module-3",
+    "version": "0.0.1",
+    "main": "./dist/index.js",
+    "types": "./dist/@types/index",
+    "scripts": {
+        "build": "../node_modules/.bin/webpack"
+    },
+    "dependencies": {
+        "@local/module-2": "0.0.1"
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+      "declaration": true,
+      "jsx": "react",
+      "resolveJsonModule": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "allowSyntheticDefaultImports": true,
+      "skipLibCheck": true,
+      "inlineSources": true,
+      "lib": [
+        "es2017",
+        "dom"
+      ],
+      "importHelpers": true,
+      "preserveSymlinks": true,
+      "module": "es6",
+      "target": "es2017",
+      "sourceMap": true,
+      "moduleResolution": "node",
+      "strict": false,
+      "composite": true
+    }
+  }
+  
