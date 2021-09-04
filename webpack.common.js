@@ -1,7 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const fs = require("fs");
-const nodeExternals = require('webpack-node-externals');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const mapModuleIds = fn => compiler => {
     const context = compiler.options.context;
@@ -38,24 +38,40 @@ module.exports = (dir, lib) => {
                 path.join(dir, 'node_modules'),
             ]
         },
-        module: {
-            rules:[
-
-                ...externals.map(e => {
-                   return {
-                       test: new RegExp(`/${e}/`),
-                       loader: `val-loader`,
-                       options: {
-                           executableFile: path.join(__dirname, 'val-loader.js' ),
-                           options:{
-                               module: e
-                           }
-                       }
-                   }
+        ignoreWarnings: [/Failed to parse source map/],
+        optimization: {
+            minimizer: [
+                new TerserPlugin({
+                    parallel: true,
+                    terserOptions: {
+                        ecma: 2017
+                    }
                 })
             ]
         },
-        externalsType:t,
+        module: {
+            rules: [
+
+                {
+                    test: /\.js$/,
+                    enforce: 'pre',
+                    use: ['source-map-loader']
+                }
+                ,
+                ...externals.map(e => {
+                    return {
+                        test: new RegExp(`/${e}/`),
+                        loader: `val-loader`,
+                        options: {
+                            executableFile: path.join(__dirname, 'val-loader.js'),
+                            options: {
+                                module: e
+                            }
+                        }
+                    }
+                })
+            ]
+        },
         plugins: [
             mapModuleIds((id, mod) => {
                 if (id === './dist/index.js') {
@@ -63,7 +79,6 @@ module.exports = (dir, lib) => {
                 }
                 return id;
             }),
-
             ...(lib ? [new webpack.DllPlugin({
                 context: path.join(dir, '..'),
                 name: p.name,
@@ -82,6 +97,7 @@ module.exports = (dir, lib) => {
 
             }).filter(f => !!f))
         ],
+        devtool: "eval-cheap-module-source-map",
         mode: "development"
     }
 }
